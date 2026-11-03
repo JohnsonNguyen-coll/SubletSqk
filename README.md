@@ -7,8 +7,11 @@ Sepolia-only Squeek NFT rental escrow and temporary usage registry, with a Next.
 Private frontend: [Open SubletSqk](https://hamsterdam-squeek-rentals.hoangnguyen181104hi.chatgpt.site). Frontend publication is complete; the rental contract remains undeployed until the local testnet key is filled.
 
 <!-- DEPLOYMENT -->
+Rental: [0x43A8B02a3abc4d6C1d373FAE8385f618BC4f3bc3](https://eth-sepolia.blockscout.com/address/0x43A8B02a3abc4d6C1d373FAE8385f618BC4f3bc3)  
+Transaction: [0x3101f963ea123d281b0ce7774bd8fa1f2d37e6f1801c29d12c7708030b4c4c9b](https://eth-sepolia.blockscout.com/tx/0x3101f963ea123d281b0ce7774bd8fa1f2d37e6f1801c29d12c7708030b4c4c9b)  
+Deployment block: 12057052
 
-Smart contract not deployed yet. The local `.env` has been created with a blank `PRIVATE_KEY`; deployment requires that key and a funded Sepolia account. No rental address is fabricated. The UI disables protocol transactions until an address is recorded and its bindings are verified.
+Smart contract deployed and verified on Sepolia. The frontend deployment record contains its confirmed address.
 
 | Input | Verified official value |
 | --- | --- |
