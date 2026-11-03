@@ -21,3 +21,9 @@ Vendored source revisions:
 - forge-std: `dc647cc030d9d65910d8f1172a0cde48d7106e32`.
 
 No external security audit has been performed.
+
+## Landing and app separation — November 4, 2026
+
+Public pages now include Home, How it works, Docs (overview plus Renting, Listing, Security, Contracts), and FAQ. Launch app enters /app/, with independent Explore, My Squeeks, My Rentals and Earnings URLs. Both layouts use top navigation. Wallet providers are limited to the app layout. React Bits Plasma replaces DotGrid, covers the public pages, supports pausing and respects reduced motion.
+
+Production export and TypeScript checks pass for all generated routes. Browser checks verified Home → How it works → Docs → Renting → Launch app, each app tab URL, disabled wallet-dependent actions while disconnected, and mobile top navigation. No contract logic changed. Contract deployment remains pending.
