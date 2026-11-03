@@ -1,0 +1,16 @@
+{
+  "name": "subletsqk-protocol",
+  "private": true,
+  "scripts": {
+    "test": "node node_modules/@foundry-rs/forge/bin.mjs test",
+    "build:contracts": "node node_modules/@foundry-rs/forge/bin.mjs build",
+    "deploy:sepolia": "node script/deploy.mjs"
+  },
+  "devDependencies": {
+    "@foundry-rs/forge": "1.7.1"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "viem": "^2.38.0"
+  }
+}

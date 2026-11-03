@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+node_modules/
+frontend/.next/
+frontend/out/
+out/
+cache/
+broadcast/
+research/ui-ux-pro-max/
+lib/*/.git/
+.openai/artifacts/
+*.log
+outputs/
