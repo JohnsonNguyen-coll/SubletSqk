@@ -11,7 +11,7 @@ import Brand from './Brand';
 import BrandName from './BrandName';
 
 type View = 'browse'|'squeeks'|'rentals'|'earnings';
-const tabs = [['browse','/app/','Explore'],['squeeks','/app/squeeks/','My Squeeks'],['rentals','/app/rentals/','My Rentals'],['earnings','/app/earnings/','Earnings']] as const;
+const tabs = [['browse','/app/','Rent'],['trade','/app/trade/','Trade'],['staking','/app/staking/','Staking'],['squeeks','/app/squeeks/','My Squeeks'],['rentals','/app/rentals/','My Rentals'],['earnings','/app/earnings/','Earnings']] as const;
 const amount = (value: bigint) => formatUnits(value,18);
 const same = (a?: string,b?: string) => !!a && !!b && a.toLowerCase()===b.toLowerCase();
 function message(error: unknown) { const e = error as {shortMessage?:string;message?:string}; return e.shortMessage || e.message || 'The transaction could not be completed.'; }

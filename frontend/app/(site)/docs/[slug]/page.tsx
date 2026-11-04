@@ -4,12 +4,14 @@ import {ArrowLeft, ArrowRight, ArrowUpRight, ShieldCheck} from 'lucide-react';
 import {guides,type GuideSlug} from '../../../../lib/docs';
 import DocsNav from '../../../../components/DocsNav';
 import deployment from '../../../../lib/deployment.json';
+import tradeDeployment from '../../../../lib/trade-deployment.json';
 
 export function generateStaticParams(){return Object.keys(guides).map(slug=>({slug}))}
 export const dynamicParams=false;
 
 const addresses=[
   ['Rental contract',deployment.address],
+  ['Trade contract',tradeDeployment.address],
   ['Squeek NFT','0x0eAF3E0d40A0a8E5a6Ac030b2459E9FB0B7905c6'],
   ['SQK token','0x6872bfa5ccc3e9e440c6c16e5ffdabb8dba4cc76'],
 ] as const;

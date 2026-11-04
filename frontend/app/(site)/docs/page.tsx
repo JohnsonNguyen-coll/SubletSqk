@@ -1,12 +1,13 @@
 import type {Metadata} from 'next';
 import Link from 'next/link';
-import {ArrowRight, ArrowUpRight, BookOpen, FileCode2, House, KeyRound, ShieldCheck} from 'lucide-react';
+import {ArrowRight, ArrowUpRight, BookOpen, FileCode2, House, KeyRound, ShieldCheck, ShoppingBag, ChartNoAxesCombined} from 'lucide-react';
 import DocsNav from '../../../components/DocsNav';
 import deployment from '../../../lib/deployment.json';
+import tradeDeployment from '../../../lib/trade-deployment.json';
 
 export const metadata:Metadata={
   title:'VeilHub',
-  description:'Protocol documentation for VeilHub NFT rentals on Ethereum Sepolia.',
+  description:'Protocol documentation for VeilHub NFT rentals, SQK trading and staking scenarios on Ethereum Sepolia.',
 };
 
 const topics=[
@@ -14,6 +15,8 @@ const topics=[
   {number:'02',slug:'listing',title:'Listing',description:'Depositing an NFT, setting terms, delisting and withdrawing.',Icon:House},
   {number:'03',slug:'security',title:'Security',description:'Escrow guarantees, administrative powers and known limitations.',Icon:ShieldCheck},
   {number:'04',slug:'contracts',title:'Contracts & API',description:'Deployed addresses, public reads and lifecycle functions.',Icon:FileCode2},
+  {number:'05',slug:'trading',title:'NFT trading',description:'Escrow sales, SQK settlement, royalty and mining reward ownership.',Icon:ShoppingBag},
+  {number:'06',slug:'staking',title:'Staking scenarios',description:'Whitepaper power model, editable assumptions and live context.',Icon:ChartNoAxesCombined},
 ] as const;
 
 const lifecycle=[
@@ -28,12 +31,12 @@ export default function Docs(){
     <header className="docs-heading">
       <div className="docs-kicker"><BookOpen size={15}/> DOCUMENTATION <span>VERSION 0.1 · SEPOLIA</span></div>
       <h1>VeilHub documentation</h1>
-      <p>How NFT escrow, fixed-duration rentals and SQK payments work. The app reads the deployed Sepolia contract and asks your wallet to sign transactions.</p>
+      <p>How NFT rentals and SQK sales work on Sepolia, plus how to use the separate staking scenario calculator. Transactional and estimated features are clearly identified in each guide.</p>
     </header>
     <DocsNav/>
 
     <section className="docs-deployment" aria-labelledby="docs-deployment-title">
-      <div><span className="docs-status"><span className="live-dot"/> TESTNET DEPLOYMENT</span><h2 id="docs-deployment-title">Rental contract on Ethereum Sepolia</h2><p>Chain ID 11155111 · Independent protocol · No mainnet deployment</p></div>
+      <div><span className="docs-status"><span className="live-dot"/> TESTNET DEPLOYMENT</span><h2 id="docs-deployment-title">Rental and trade contracts on Ethereum Sepolia</h2><p>Chain ID 11155111 · Independent protocol · Staking calculator is estimated</p><p>Trade: {tradeDeployment.address?<a href={'https://eth-sepolia.blockscout.com/address/'+tradeDeployment.address} target="_blank" rel="noreferrer"><code>{tradeDeployment.address}</code> ↗</a>:'Pending deployment'}</p></div>
       {deployment.address?<a href={'https://eth-sepolia.blockscout.com/address/'+deployment.address} target="_blank" rel="noreferrer"><code>{deployment.address}</code><ArrowUpRight size={17}/></a>:<strong>Deployment address pending</strong>}
     </section>
 
