@@ -77,7 +77,7 @@ Every listing links to a shareable `/app/squeek/?id=<tokenId>` detail page with 
 For Vercel, set the Root Directory to `frontend`. If you want WalletConnect and mobile wallet options, set `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` in Vercel Environment Variables and redeploy; see `frontend/.env.example`. `NEXT_PUBLIC_SEPOLIA_RPC_URL` can override the default public Sepolia RPC. These variables are public frontend configuration, never private keys.
 
 
-The current app invokes the deployed Sepolia rental contract directly. There are no sample listings, browser balances or simulated actions. Real transactions require a compatible wallet, Sepolia ETH for gas and the official Sepolia NFT or SQK as applicable. VeilHub does not distribute those assets; the market can remain empty until a holder lists an eligible NFT.
+The app invokes the deployed Sepolia rental contract directly. Listings, balances, and transactions come from Sepolia. Real transactions require a compatible wallet, Sepolia ETH for gas and the official Sepolia NFT or SQK as applicable. VeilHub does not distribute those assets; the market can remain empty until a holder lists an eligible NFT.
 
 Read-only Sepolia verification on November 4, 2026 confirmed chain ID `11155111`, contract code at the recorded rental address, matching `nft()` and `sqk()` bindings, and `tokenCount() = 0`. No live list/rent/claim transaction has been executed in this verification.
 
@@ -108,8 +108,8 @@ Configure a `sepolia` RPC alias or use a public RPC URL with that command. The F
 
 ## Validation
 
-17 Foundry tests pass, including 256 fuzz runs. Frontend production build passes on Next.js 16.4.4, RainbowKit 2.2.11 and wagmi 2.19.5. The protocol tests use local mock assets; public end-to-end transactions require genuine Sepolia Squeek NFTs and SQK, which VeilHub does not distribute.
+17 Foundry tests pass, including 256 fuzz runs. Frontend production build passes on Next.js 16.4.4, RainbowKit 2.2.11 and wagmi 2.19.5. The contract tests use isolated local ERC-721 and ERC-20 fixtures; public end-to-end transactions require genuine Sepolia Squeek NFTs and SQK, which VeilHub does not distribute.
 
-Foundry covers list/delist, rent, 95/5 math, fee snapshot and cap, active-rental rejection, early withdrawal, exact expiry, withdrawal/relist nonce, claiming, unauthenticated operations, unexpected safe deposit, reentrancy during SQK payment/claim and NFT withdrawal, pause preserving exits, and price/duration/fee fuzzing (256 runs). `npm --prefix frontend run build` typechecks and statically builds the public and app routes. Live Sepolia compatibility probe has confirmed the official dependency contracts exist and ERC-4907 is unsupported. A local-only mock NFT/SQK exists exclusively in `contract/test/` and is never used in the product UI or production deployment script.
+Foundry covers list/delist, rent, 95/5 math, fee snapshot and cap, active-rental rejection, early withdrawal, exact expiry, withdrawal/relist nonce, claiming, unauthenticated operations, unexpected safe deposit, reentrancy during SQK payment/claim and NFT withdrawal, pause preserving exits, and price/duration/fee fuzzing (256 runs). `npm --prefix frontend run build` typechecks and statically builds the public and app routes. Live Sepolia compatibility probe has confirmed the official dependency contracts exist and ERC-4907 is unsupported. Local test fixtures under `contract/test/` are never used in the website or production deployment script.
 
 This testnet prototype is not externally audited. Passing local tests does not establish compatibility with future Squeekchain upgrades. The official mining source is not explorer-verified per its docs, and governance can upgrade mining. Re-check deployed behavior before every integration change.
