@@ -1,7 +1,6 @@
 import type {Metadata} from 'next';
 import Link from 'next/link';
-import {ArrowRight, ArrowUpRight, BookOpen, FileCode2, House, KeyRound, ShieldCheck, ShoppingBag, ChartNoAxesCombined} from 'lucide-react';
-import DocsNav from '../../../components/DocsNav';
+import {ArrowRight, ArrowUpRight, FileCode2, House, KeyRound, ShieldCheck, ShoppingBag, ChartNoAxesCombined} from 'lucide-react';
 import deployment from '../../../lib/deployment.json';
 import tradeDeployment from '../../../lib/trade-deployment.json';
 
@@ -13,10 +12,10 @@ export const metadata:Metadata={
 const topics=[
   {number:'01',slug:'renting',title:'Renting',description:'Payment, duration, expiry and the exact scope of usage rights.',Icon:KeyRound},
   {number:'02',slug:'listing',title:'Listing',description:'Depositing an NFT, setting terms, delisting and withdrawing.',Icon:House},
-  {number:'03',slug:'security',title:'Security',description:'Escrow guarantees, administrative powers and known limitations.',Icon:ShieldCheck},
-  {number:'04',slug:'contracts',title:'Contracts & API',description:'Deployed addresses, public reads and lifecycle functions.',Icon:FileCode2},
-  {number:'05',slug:'trading',title:'NFT trading',description:'Escrow sales, SQK settlement, royalty and mining reward ownership.',Icon:ShoppingBag},
-  {number:'06',slug:'staking',title:'Staking scenarios',description:'Whitepaper power model, editable assumptions and live context.',Icon:ChartNoAxesCombined},
+  {number:'03',slug:'trading',title:'NFT trading',description:'Escrow sales, SQK settlement, royalties and reward ownership.',Icon:ShoppingBag},
+  {number:'04',slug:'staking',title:'Staking scenarios',description:'Explore the whitepaper power model with editable assumptions.',Icon:ChartNoAxesCombined},
+  {number:'05',slug:'security',title:'Security & limits',description:'Escrow guarantees, administrative powers and known limitations.',Icon:ShieldCheck},
+  {number:'06',slug:'contracts',title:'Contracts & API',description:'Deployment addresses, public reads and lifecycle functions.',Icon:FileCode2},
 ] as const;
 
 const lifecycle=[
@@ -27,21 +26,21 @@ const lifecycle=[
 ] as const;
 
 export default function Docs(){
-  return <div className="marketing-container inner-page docs-shell">
+  return <div className="docs-shell docs-overview">
     <header className="docs-heading">
-      <div className="docs-kicker"><BookOpen size={15}/> DOCUMENTATION <span>VERSION 0.1 · SEPOLIA</span></div>
-      <h1>VeilHub documentation</h1>
-      <p>How NFT rentals and SQK sales work on Sepolia, plus how to use the separate staking scenario calculator. Transactional and estimated features are clearly identified in each guide.</p>
+      <div className="docs-kicker">DOCUMENTATION <span>/</span> OVERVIEW</div>
+      <h1>Documentation</h1>
+      <p>Guides to renting and trading Squeek NFTs, understanding contract escrow, and exploring staking scenarios on Ethereum Sepolia.</p>
     </header>
-    <DocsNav/>
 
     <section className="docs-deployment" aria-labelledby="docs-deployment-title">
-      <div><span className="docs-status"><span className="live-dot"/> TESTNET DEPLOYMENT</span><h2 id="docs-deployment-title">Rental and trade contracts on Ethereum Sepolia</h2><p>Chain ID 11155111 · Independent protocol · Staking calculator is estimated</p><p>Trade: {tradeDeployment.address?<a href={'https://eth-sepolia.blockscout.com/address/'+tradeDeployment.address} target="_blank" rel="noreferrer"><code>{tradeDeployment.address}</code> ↗</a>:'Pending deployment'}</p></div>
-      {deployment.address?<a href={'https://eth-sepolia.blockscout.com/address/'+deployment.address} target="_blank" rel="noreferrer"><code>{deployment.address}</code><ArrowUpRight size={17}/></a>:<strong>Deployment address pending</strong>}
+      <div className="docs-deployment-head"><div><span className="docs-status"><span className="live-dot"/> LIVE ON TESTNET</span><h2 id="docs-deployment-title">Deployment status</h2></div><span>Ethereum Sepolia · Chain ID 11155111</span></div>
+      <div className="docs-deployment-grid"><div><span>RENTAL CONTRACT</span>{deployment.address?<a href={'https://eth-sepolia.blockscout.com/address/'+deployment.address} target="_blank" rel="noreferrer"><code>{deployment.address}</code><ArrowUpRight size={15}/></a>:<em>Pending deployment</em>}</div><div><span>TRADE CONTRACT</span>{tradeDeployment.address?<a href={'https://eth-sepolia.blockscout.com/address/'+tradeDeployment.address} target="_blank" rel="noreferrer"><code>{tradeDeployment.address}</code><ArrowUpRight size={15}/></a>:<em>Pending deployment</em>}</div></div>
+      <p>Staking Lab is an estimated calculator; no official Sepolia staking contract is deployed.</p>
     </section>
 
     <section className="docs-section" aria-labelledby="docs-start-title">
-      <div className="docs-section-heading"><div><span className="docs-label">START HERE</span><h2 id="docs-start-title">Find the information you need</h2></div><p>Each guide explains the actions, on-chain behavior and limits for one part of the protocol.</p></div>
+      <div className="docs-section-heading"><div><span className="docs-label">BROWSE BY TOPIC</span><h2 id="docs-start-title">Explore the guides</h2></div><p>Clear steps, contract behavior and limits for every part of VeilHub.</p></div>
       <div className="docs-topic-grid">{topics.map(({number,slug,title,description,Icon})=><Link href={'/docs/'+slug+'/'} className="docs-topic-card" key={slug}><div className="docs-card-top"><Icon size={23}/><span>{number}</span></div><h3>{title}</h3><p>{description}</p><span className="docs-card-link">Read guide <ArrowRight size={15}/></span></Link>)}</div>
     </section>
 
