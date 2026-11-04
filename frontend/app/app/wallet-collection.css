@@ -1,0 +1,59 @@
+.wallet-squeek-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(142px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.wallet-squeek {
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-raised);
+  text-align: left;
+}
+
+.wallet-squeek:hover,
+.wallet-squeek.selected {
+  border-color: var(--accent);
+}
+
+.wallet-squeek img,
+.wallet-squeek-placeholder {
+  display: flex;
+  width: 100%;
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+  object-fit: cover;
+  background: #292630;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.wallet-squeek > span:last-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 10px;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.wallet-empty {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-raised);
+  font-size: 13px;
+}
+
+.wallet-empty p + p { margin-top: 8px; color: var(--muted); }
+.wallet-empty a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.manual-lookup { margin-top: 18px; font-size: 12px; color: var(--muted); }
+.manual-lookup summary { cursor: pointer; }
+.manual-lookup .lookup-form { margin-top: 14px; }
+.preview-empty-link {display:inline-flex;align-items:center;gap:6px;margin:14px 0;color:var(--accent);font-size:12px;text-decoration:underline;text-underline-offset:3px}

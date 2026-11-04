@@ -28,7 +28,7 @@ Smart contract deployed and verified on Sepolia. The frontend deployment record 
 | ERC-4907 | Not supported: live `supportsInterface(0xad092b5c)` returned false |
 | Eligibility | SqueekMining claim/merge require NFT ownership; approvals do not authorize either |
 
-Sources checked November 3, 2026: [deployment record](https://docs.squeekchain.com/assets/deployments/sepolia.json), [NFT reference](https://docs.squeekchain.com/developers/nft/), [mining reference](https://docs.squeekchain.com/developers/mining/). Pinned official ABIs and the deployment record are in `contract/research/`. These technical references describe the deployed owner-based system; the whitepaper describes a different proposed staking economy. Do not mix the two. Public NFT minting is currently paused according to the docs.
+Sources checked November 3, 2026: [deployment record](https://docs.squeekchain.com/assets/deployments/sepolia.json), [NFT reference](https://docs.squeekchain.com/developers/nft/), [mining reference](https://docs.squeekchain.com/developers/mining/). Pinned official ABIs and the deployment record are in `contract/research/`. These technical references describe the deployed owner-based system; the whitepaper describes a different proposed staking economy. Do not mix the two. The official docs describe Sepolia minting as paused; a live read on November 4, 2026 found `paused() = false` but `mintPhase() = Closed`. Check current on-chain state before attempting to mint. SubletSqk provides no NFT or SQK faucet; Sepolia ETH faucets supply gas only.
 
 ## Architecture and compatibility
 
@@ -66,9 +66,10 @@ npm --prefix frontend run dev
 
 Open `http://127.0.0.1:3000`. `contract/.npmrc` disables install scripts to work around the npm Foundry wrapper's Unix-only postinstall on Windows; its official platform binary is installed as an optional dependency. OpenZeppelin v5.6.1 and forge-std source dependencies are vendored under `contract/lib/`. Solidity compiler is pinned to 0.8.30 with Cancun EVM.
 
-Public routes: `/` landing, `/how-it-works/`, `/docs/`, `/docs/renting/`, `/docs/listing/`, `/docs/security/`, `/docs/contracts/` and `/faq/`. Launch app enters `/app/` (browse). App routes are `/app/squeeks/` (wallet ownership lookup and escrow management), `/app/rentals/` (active rentals with countdown), and `/app/earnings/` (claims). Each destination appears in its respective top navigation. Legacy `/squeeks/`, `/rentals/` and `/earnings/` redirect to the new app URLs. Wallet providers load only inside the app layout. Wallet connection uses an injected EIP-1193 browser wallet. No WalletConnect API key is required. NFT lookup is by token ID, verified with live `ownerOf`; automatic wallet inventory indexing is not included. Lists use bounded `tokenPage` reads and current storage, not a mock API. Token IDs are retained for historical pagination, but withdrawn positions and expired rental history are not displayed as active rentals.
+Public routes: `/` landing, `/how-it-works/`, `/docs/`, `/docs/renting/`, `/docs/listing/`, `/docs/security/`, `/docs/contracts/` and `/faq/`. Launch app opens the browser-only test flow at `/app/`. Its four tabs have separate URLs: `/app/`, `/app/squeeks/`, `/app/rentals/` and `/app/earnings/`. A one-time English notice explains that the current flow uses sample Squeeks and SQK, needs no wallet and sends no on-chain transactions. The user can switch between Holder and Guest, then list, rent, advance to expiry, withdraw and claim. State is stored in the browser and can be reset.
 
-Set optional `NEXT_PUBLIC_SEPOLIA_RPC_URL` in `frontend/.env.local` for a browser-accessible RPC. Never put a private key or a private RPC credential into a `NEXT_PUBLIC_*` variable. The default RPC is a public Sepolia endpoint; its CORS/rate limits affect availability. RPC failures are shown, not replaced with fake data. Footer displays chain and all configured contract addresses. NFT metadata is read from on-chain `tokenURI`; SVG is rendered only in isolated `<img>` elements.
+
+The Sepolia rental contract is deployed and documented below, but the current app does not invoke it. The earlier RainbowKit and direct on-chain marketplace implementation remains in source for future live activation; it is not mounted on the current app routes. Do not treat browser test balances, artwork or listings as official Squeekchain assets.
 
 ## Deploy to Sepolia
 
@@ -97,7 +98,7 @@ Configure a `sepolia` RPC alias or use a public RPC URL with that command. The F
 
 ## Validation
 
-17 Foundry tests pass, including 256 fuzz runs. Frontend production build passes on Next.js 16.4.4 and wagmi 3.7.11. npm audit reports zero known vulnerabilities in both dependency trees after updates.
+17 Foundry tests pass, including 256 fuzz runs. Frontend production build passes on Next.js 16.4.4, RainbowKit 2.2.11 and wagmi 2.19.5. The protocol tests use local mock assets; public end-to-end transactions require genuine Sepolia Squeek NFTs and SQK, which SubletSqk does not distribute.
 
 Foundry covers list/delist, rent, 95/5 math, fee snapshot and cap, active-rental rejection, early withdrawal, exact expiry, withdrawal/relist nonce, claiming, unauthenticated operations, unexpected safe deposit, reentrancy during SQK payment/claim and NFT withdrawal, pause preserving exits, and price/duration/fee fuzzing (256 runs). `npm --prefix frontend run build` typechecks and statically builds the public and app routes. Live Sepolia compatibility probe has confirmed the official dependency contracts exist and ERC-4907 is unsupported. A local-only mock NFT/SQK exists exclusively in `contract/test/` and is never used in the product UI or production deployment script.
 

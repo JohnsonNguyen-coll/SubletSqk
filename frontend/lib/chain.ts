@@ -1,11 +1,36 @@
-import { createPublicClient, http, parseAbi, type Address } from 'viem';
+import { createPublicClient, http, parseAbi, parseAbiItem, type Address } from 'viem';
 import { sepolia } from 'viem/chains';
 import deployment from './deployment.json';
 export const NFT = '0x0eAF3E0d40A0a8E5a6Ac030b2459E9FB0B7905c6' as Address;
 export const SQK = '0x6872bfa5ccc3e9e440c6c16e5ffdabb8dba4cc76' as Address;
 export const MARKET = deployment.address as Address | null;
 export const client = createPublicClient({ chain: sepolia, transport: http(process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com') });
-export const nftAbi = parseAbi(['function ownerOf(uint256) view returns (address)', 'function tokenURI(uint256) view returns (string)', 'function getApproved(uint256) view returns (address)', 'function approve(address,uint256)']);
+export const nftAbi = parseAbi(['function balanceOf(address) view returns (uint256)', 'function ownerOf(uint256) view returns (address)', 'function tokenURI(uint256) view returns (string)', 'function getApproved(uint256) view returns (address)', 'function approve(address,uint256)']);
+const transferEvent = parseAbiItem('event Transfer(address indexed from,address indexed to,uint256 indexed tokenId)');
+const nftDeploymentBlock = 11902282n;
+
+/** Discover candidates from the official NFT's transfer logs; verify every candidate against live ownerOf. */
+export async function ownedSqueeks(account: Address): Promise<bigint[]> {
+  const balance = await client.readContract({address: NFT, abi: nftAbi, functionName: 'balanceOf', args: [account]});
+  if (balance === 0n) return [];
+  const latest = await client.getBlockNumber();
+  const candidates = new Set<bigint>();
+  const ranges: {fromBlock: bigint; toBlock: bigint}[] = [];
+  for (let fromBlock = nftDeploymentBlock; fromBlock <= latest; fromBlock += 10000n) {
+    ranges.push({fromBlock, toBlock: fromBlock + 9999n > latest ? latest : fromBlock + 9999n});
+  }
+  for (let i = 0; i < ranges.length; i += 4) {
+    const pages = await Promise.all(ranges.slice(i, i + 4).map(range => client.getLogs({address: NFT, event: transferEvent, args: {to: account}, ...range})));
+    for (const log of pages.flat()) if (log.args.tokenId !== undefined) candidates.add(log.args.tokenId);
+  }
+  const ids = [...candidates];
+  const owned: bigint[] = [];
+  for (let i = 0; i < ids.length; i += 20) {
+    const owners = await Promise.all(ids.slice(i, i + 20).map(id => client.readContract({address: NFT, abi: nftAbi, functionName: 'ownerOf', args: [id]}).catch(() => null)));
+    owners.forEach((owner, index) => {if (owner?.toLowerCase() === account.toLowerCase()) owned.push(ids[i + index]);});
+  }
+  return owned.sort((a, b) => a < b ? -1 : a > b ? 1 : 0);
+}
 export const tokenAbi = parseAbi(['function balanceOf(address) view returns (uint256)', 'function allowance(address,address) view returns (uint256)', 'function approve(address,uint256) returns (bool)']);
 export const marketAbi = parseAbi([
   'function listings(uint256) view returns (address owner,uint128 pricePerDay,uint16 minDays,uint16 maxDays,uint16 feeBps,bool listed,address renter,uint64 expiresAt,uint256 nonce)',
