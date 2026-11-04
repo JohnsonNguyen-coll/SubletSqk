@@ -1,5 +1,5 @@
 {
-  "name": "subletsqk-protocol",
+  "name": "veilhub-protocol",
   "private": true,
   "scripts": {
     "test": "node node_modules/@foundry-rs/forge/bin.mjs test",

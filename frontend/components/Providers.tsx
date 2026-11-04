@@ -9,7 +9,7 @@ import { RainbowKitProvider, darkTheme, getDefaultConfig } from '@rainbow-me/rai
 const transport = http(process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com');
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
 const config = projectId
-  ? getDefaultConfig({appName: 'SubletSqk', projectId, chains: [sepolia], transports: {[sepolia.id]: transport}, ssr: true})
+  ? getDefaultConfig({appName: 'VeilHub', projectId, chains: [sepolia], transports: {[sepolia.id]: transport}, ssr: true})
   : createConfig({chains: [sepolia], connectors: [injected()], transports: {[sepolia.id]: transport}, ssr: true});
 
 export default function Providers({children}: {children: ReactNode}) {

@@ -10,14 +10,14 @@ type View = 'browse'|'squeeks'|'rentals'|'earnings';
 type Role = 'holder'|'guest';
 type Squeek = {id:number; holder:Role; price:number; min:number; max:number; escrowed:boolean; listed:boolean; renter:Role|null; expiresAt:number};
 type PreviewState = {role:Role; squeeks:Squeek[]; guestBalance:number; holderEarnings:number; holderBalance:number};
-const storageKey = 'subletsqk-test-v1';
-const introKey = 'subletsqk-test-intro-ack';
+const storageKey = 'veilhub-test-v1';
+const introKey = 'veilhub-test-intro-ack';
 const initial = ():PreviewState=>({role:'guest',guestBalance:250,holderEarnings:0,holderBalance:0,squeeks:[
   {id:104,holder:'holder',price:12,min:1,max:7,escrowed:true,listed:true,renter:null,expiresAt:0},
   {id:207,holder:'holder',price:8,min:1,max:14,escrowed:false,listed:false,renter:null,expiresAt:0},
 ]});
 const tabs = [['browse','/app/','Explore'],['squeeks','/app/squeeks/','My Squeeks'],['rentals','/app/rentals/','My Rentals'],['earnings','/app/earnings/','Earnings']] as const;
-const sampleArt = '/brand/subletsqk-mark.svg';
+const sampleArt = '/brand/veilhub-mark.svg';
 
 export default function PreviewMarketplace({view}:{view:View}) {
   const [state,setState] = useState<PreviewState>(initial);
@@ -33,9 +33,9 @@ export default function PreviewMarketplace({view}:{view:View}) {
   const [introAccepted,setIntroAccepted] = useState(false);
 
   useEffect(()=>{
-    try {const saved=localStorage.getItem(storageKey);if(saved){const parsed=JSON.parse(saved) as PreviewState;if(Array.isArray(parsed.squeeks))setState(parsed);}} catch {}
+    try {const saved=localStorage.getItem(storageKey)??localStorage.getItem('subletsqk-test-v1');if(saved){const parsed=JSON.parse(saved) as PreviewState;if(Array.isArray(parsed.squeeks))setState(parsed);}} catch {}
     setLoaded(true);
-    try {setIntroAccepted(new URLSearchParams(window.location.search).get('intro')==='1'?false:sessionStorage.getItem(introKey)==='yes');} catch {}
+    try {setIntroAccepted(new URLSearchParams(window.location.search).get('intro')==='1'?false:sessionStorage.getItem(introKey)==='yes'||sessionStorage.getItem('subletsqk-test-intro-ack')==='yes');} catch {}
     setIntroReady(true);
   },[]);
   useEffect(()=>{if(loaded)localStorage.setItem(storageKey,JSON.stringify(state));},[state,loaded]);
@@ -66,7 +66,7 @@ export default function PreviewMarketplace({view}:{view:View}) {
   const rows=view==='browse'?available:view==='squeeks'?mine:rentals;
 
   return <>
-    {introReady&&!introAccepted&&<div className="preview-overlay test-intro-overlay"><section className="preview-dialog test-intro-dialog" role="dialog" aria-modal="true" aria-labelledby="test-intro-title" aria-describedby="test-intro-description"><span className="eyebrow">BEFORE YOU ENTER</span><h2 id="test-intro-title">Welcome to SubletSqk</h2><p id="test-intro-description">This app currently uses sample Squeeks and test SQK because official Squeek NFTs and SQK are not available for an open end-to-end test. You can try listing, renting, expiry, withdrawal and claiming here. No wallet is needed, and nothing is sent on-chain.</p><button autoFocus className="button primary" onClick={()=>{try{sessionStorage.setItem(introKey,'yes');}catch{}setIntroAccepted(true);}}>OK, start testing <ArrowRight size={16}/></button></section></div>}
+    {introReady&&!introAccepted&&<div className="preview-overlay test-intro-overlay"><section className="preview-dialog test-intro-dialog" role="dialog" aria-modal="true" aria-labelledby="test-intro-title" aria-describedby="test-intro-description"><span className="eyebrow">BEFORE YOU ENTER</span><h2 id="test-intro-title">Welcome to VeilHub</h2><p id="test-intro-description">This app currently uses sample Squeeks and test SQK because official Squeek NFTs and SQK are not available for an open end-to-end test. You can try listing, renting, expiry, withdrawal and claiming here. No wallet is needed, and nothing is sent on-chain.</p><button autoFocus className="button primary" onClick={()=>{try{sessionStorage.setItem(introKey,'yes');}catch{}setIntroAccepted(true);}}>OK, start testing <ArrowRight size={16}/></button></section></div>}
     <div className="testnet-strip preview-strip">TEST MODE <span className="strip-divider">/</span> No wallet, assets or on-chain transactions</div>
     <header className="header shell app-header preview-header"><Link href="/" className="wordmark"><Brand/><BrandName/></Link>
       <nav className="primary-nav" aria-label="App navigation">{tabs.map(([key,url,label])=><Link key={key} href={url} aria-current={key===view?'page':undefined}>{label}</Link>)}</nav>

@@ -1,4 +1,4 @@
-# SubletSqk
+# VeilHub
 
 Sepolia-only Squeek NFT rental escrow and temporary usage registry, with a Next.js + wagmi/viem frontend. This is an independent project, not an official Squeekchain integration.
 
@@ -10,7 +10,7 @@ Sepolia-only Squeek NFT rental escrow and temporary usage registry, with a Next.
 
 ## Deployment status
 
-Private frontend preview: [Open SubletSqk](https://hamsterdam-squeek-rentals.hoangnguyen181104hi.chatgpt.site). The rental contract is deployed on Sepolia. Publish the current frontend build to show its confirmed address.
+The rental contract is deployed on Sepolia. Set the Vercel Root Directory to `frontend` to publish the VeilHub website.
 
 <!-- DEPLOYMENT -->
 Rental: [0x43A8B02a3abc4d6C1d373FAE8385f618BC4f3bc3](https://eth-sepolia.blockscout.com/address/0x43A8B02a3abc4d6C1d373FAE8385f618BC4f3bc3)  
@@ -18,6 +18,8 @@ Transaction: [0x3101f963ea123d281b0ce7774bd8fa1f2d37e6f1801c29d12c7708030b4c4c9b
 Deployment block: 12057052
 
 Smart contract deployed and verified on Sepolia. The frontend deployment record contains its confirmed address.
+
+The deployed Solidity contract retains its original `SubletSqk` identifier. The VeilHub name applies to the website, documentation and package branding; renaming the deployed contract is not possible without a new deployment.
 
 | Input | Verified official value |
 | --- | --- |
@@ -28,11 +30,11 @@ Smart contract deployed and verified on Sepolia. The frontend deployment record 
 | ERC-4907 | Not supported: live `supportsInterface(0xad092b5c)` returned false |
 | Eligibility | SqueekMining claim/merge require NFT ownership; approvals do not authorize either |
 
-Sources checked November 3, 2026: [deployment record](https://docs.squeekchain.com/assets/deployments/sepolia.json), [NFT reference](https://docs.squeekchain.com/developers/nft/), [mining reference](https://docs.squeekchain.com/developers/mining/). Pinned official ABIs and the deployment record are in `contract/research/`. These technical references describe the deployed owner-based system; the whitepaper describes a different proposed staking economy. Do not mix the two. The official docs describe Sepolia minting as paused; a live read on November 4, 2026 found `paused() = false` but `mintPhase() = Closed`. Check current on-chain state before attempting to mint. SubletSqk provides no NFT or SQK faucet; Sepolia ETH faucets supply gas only.
+Sources checked November 3, 2026: [deployment record](https://docs.squeekchain.com/assets/deployments/sepolia.json), [NFT reference](https://docs.squeekchain.com/developers/nft/), [mining reference](https://docs.squeekchain.com/developers/mining/). Pinned official ABIs and the deployment record are in `contract/research/`. These technical references describe the deployed owner-based system; the whitepaper describes a different proposed staking economy. Do not mix the two. The official docs describe Sepolia minting as paused; a live read on November 4, 2026 found `paused() = false` but `mintPhase() = Closed`. Check current on-chain state before attempting to mint. VeilHub provides no NFT or SQK faucet; Sepolia ETH faucets supply gas only.
 
 ## Architecture and compatibility
 
-`Holder → SubletSqk NFT escrow ← renter's SQK payment → claimable owner / treasury balances`
+`Holder → VeilHub NFT escrow ← renter's SQK payment → claimable owner / treasury balances`
 
 The holder approves one NFT and calls `list(tokenId, pricePerDay, minDays, maxDays)`. The NFT is safely transferred into an immutable, non-upgradeable contract. The depositor retains the sole withdrawal entitlement. **On-chain `ownerOf` becomes the escrow address:** the implementation follows the requested escrow model, so it is not literal ownership-preserving ERC-4907 rental. Neither renter nor admin ever acquires the NFT. The application has no custodial wallet or backend signer.
 
@@ -98,7 +100,7 @@ Configure a `sepolia` RPC alias or use a public RPC URL with that command. The F
 
 ## Validation
 
-17 Foundry tests pass, including 256 fuzz runs. Frontend production build passes on Next.js 16.4.4, RainbowKit 2.2.11 and wagmi 2.19.5. The protocol tests use local mock assets; public end-to-end transactions require genuine Sepolia Squeek NFTs and SQK, which SubletSqk does not distribute.
+17 Foundry tests pass, including 256 fuzz runs. Frontend production build passes on Next.js 16.4.4, RainbowKit 2.2.11 and wagmi 2.19.5. The protocol tests use local mock assets; public end-to-end transactions require genuine Sepolia Squeek NFTs and SQK, which VeilHub does not distribute.
 
 Foundry covers list/delist, rent, 95/5 math, fee snapshot and cap, active-rental rejection, early withdrawal, exact expiry, withdrawal/relist nonce, claiming, unauthenticated operations, unexpected safe deposit, reentrancy during SQK payment/claim and NFT withdrawal, pause preserving exits, and price/duration/fee fuzzing (256 runs). `npm --prefix frontend run build` typechecks and statically builds the public and app routes. Live Sepolia compatibility probe has confirmed the official dependency contracts exist and ERC-4907 is unsupported. A local-only mock NFT/SQK exists exclusively in `contract/test/` and is never used in the product UI or production deployment script.
 

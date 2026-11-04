@@ -5,8 +5,8 @@ import DocsNav from '../../../components/DocsNav';
 import deployment from '../../../lib/deployment.json';
 
 export const metadata:Metadata={
-  title:'SubletSqk',
-  description:'Protocol documentation for SubletSqk NFT rentals on Ethereum Sepolia.',
+  title:'VeilHub',
+  description:'Protocol documentation for VeilHub NFT rentals on Ethereum Sepolia.',
 };
 
 const topics=[
@@ -27,7 +27,7 @@ export default function Docs(){
   return <div className="marketing-container inner-page docs-shell">
     <header className="docs-heading">
       <div className="docs-kicker"><BookOpen size={15}/> DOCUMENTATION <span>VERSION 0.1 · SEPOLIA</span></div>
-      <h1>SubletSqk documentation</h1>
+      <h1>VeilHub documentation</h1>
       <p>How NFT escrow, fixed-duration rentals and SQK payments work. The deployed protocol is on Sepolia; the current app provides a browser-only test flow with no on-chain transactions.</p>
     </header>
     <DocsNav/>
