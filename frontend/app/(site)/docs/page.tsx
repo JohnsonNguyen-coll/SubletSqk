@@ -1,7 +1,64 @@
 import type {Metadata} from 'next';
 import Link from 'next/link';
-import { ArrowUpRight, BookOpen, KeyRound, ShieldCheck, FileCode2, House } from 'lucide-react';
+import {ArrowRight, ArrowUpRight, BookOpen, FileCode2, House, KeyRound, ShieldCheck} from 'lucide-react';
 import DocsNav from '../../../components/DocsNav';
-export const metadata:Metadata={title:'Documentation | SubletSqk'};
-const topics=[['renting','Rent a Squeek','Payments, duration, usage rights and what a rental includes.',KeyRound],['listing','List your Squeek','Wallet ownership, NFT escrow, terms, withdrawals and proceeds.',House],['security','Security & boundaries','Admin powers, pause behavior, funds and integration limitations.',ShieldCheck],['contracts','Contracts & integration','Sepolia addresses, contract interfaces and the usage registry.',FileCode2]] as const;
-export default function Docs(){return <div className="marketing-container inner-page docs-page"><div className="page-intro"><span className="eyebrow">THE SUBLETSQK FIELD GUIDE</span><h1>A little reading.<br/><span>A clearer stay.</span></h1><p>Everything you need to understand the rental protocol,<br/>from your first check-in to the last claim.</p></div><DocsNav/><section className="docs-welcome"><BookOpen size={26}/><div><h2>Start with the simple version.</h2><p>A holder deposits a Squeek into escrow and sets terms. A renter pays SQK for temporary usage rights. The payment is credited to the holder and protocol. Usage expires; the holder can withdraw. Applications must explicitly recognize the usage registry.</p></div></section><div className="docs-topics">{topics.map(([slug,title,description,Icon])=><Link href={`/docs/${slug}/`} className="docs-topic" key={slug}><Icon size={24}/><h2>{title}</h2><p>{description}</p><ArrowUpRight className="topic-arrow" size={20}/></Link>)}</div><section className="docs-callout"><ShieldCheck size={22}/><div><h2>One distinction that matters.</h2><p>Temporary usage is not Squeekchain mining or staking access. The renter does not own the NFT, and no mining reward sharing is implemented. Read the boundaries before paying for any rental.</p><Link className="text-link" href="/docs/security/">Understand the limitations <ArrowUpRight size={15}/></Link></div></section><div className="docs-outro"><span>Prefer a walkthrough?</span><Link href="/how-it-works/" className="text-link">Follow a complete stay <ArrowUpRight size={16}/></Link></div></div>}
+import deployment from '../../../lib/deployment.json';
+
+export const metadata:Metadata={
+  title:'Documentation | SubletSqk',
+  description:'Protocol documentation for SubletSqk NFT rentals on Ethereum Sepolia.',
+};
+
+const topics=[
+  {number:'01',slug:'renting',title:'Renting',description:'Payment, duration, expiry and the exact scope of usage rights.',Icon:KeyRound},
+  {number:'02',slug:'listing',title:'Listing',description:'Depositing an NFT, setting terms, delisting and withdrawing.',Icon:House},
+  {number:'03',slug:'security',title:'Security',description:'Escrow guarantees, administrative powers and known limitations.',Icon:ShieldCheck},
+  {number:'04',slug:'contracts',title:'Contracts & API',description:'Deployed addresses, public reads and lifecycle functions.',Icon:FileCode2},
+] as const;
+
+const lifecycle=[
+  ['Deposit','The holder approves and deposits one Squeek into contract escrow.'],
+  ['Rent','A renter pays the quoted amount in SQK for a fixed number of whole days.'],
+  ['Use','The registry recognizes the renter until the on-chain expiry timestamp.'],
+  ['Exit','Usage expires automatically; the holder withdraws the NFT and each party claims earnings.'],
+] as const;
+
+export default function Docs(){
+  return <div className="marketing-container inner-page docs-shell">
+    <header className="docs-heading">
+      <div className="docs-kicker"><BookOpen size={15}/> DOCUMENTATION <span>VERSION 0.1 · SEPOLIA</span></div>
+      <h1>SubletSqk documentation</h1>
+      <p>How NFT escrow, fixed-duration rentals and SQK payments work. Read the compatibility limits before depositing or renting a Squeek.</p>
+    </header>
+    <DocsNav/>
+
+    <section className="docs-deployment" aria-labelledby="docs-deployment-title">
+      <div><span className="docs-status"><span className="live-dot"/> TESTNET DEPLOYMENT</span><h2 id="docs-deployment-title">Rental contract on Ethereum Sepolia</h2><p>Chain ID 11155111 · Independent protocol · No mainnet deployment</p></div>
+      {deployment.address?<a href={'https://eth-sepolia.blockscout.com/address/'+deployment.address} target="_blank" rel="noreferrer"><code>{deployment.address}</code><ArrowUpRight size={17}/></a>:<strong>Deployment address pending</strong>}
+    </section>
+
+    <section className="docs-section" aria-labelledby="docs-start-title">
+      <div className="docs-section-heading"><div><span className="docs-label">START HERE</span><h2 id="docs-start-title">Find the information you need</h2></div><p>Each guide explains the actions, on-chain behavior and limits for one part of the protocol.</p></div>
+      <div className="docs-topic-grid">{topics.map(({number,slug,title,description,Icon})=><Link href={'/docs/'+slug+'/'} className="docs-topic-card" key={slug}><div className="docs-card-top"><Icon size={23}/><span>{number}</span></div><h3>{title}</h3><p>{description}</p><span className="docs-card-link">Read guide <ArrowRight size={15}/></span></Link>)}</div>
+    </section>
+
+    <section className="docs-section docs-primer" aria-labelledby="docs-model-title">
+      <div className="docs-section-heading"><div><span className="docs-label">PROTOCOL MODEL</span><h2 id="docs-model-title">The essential facts</h2></div><p>These rules are enforced by the rental contract. Wallet and website displays are views of on-chain state.</p></div>
+      <div className="docs-fact-table" role="table" aria-label="Protocol facts">
+        <div role="row"><strong role="cell">Custody</strong><span role="cell">The listed NFT sits in contract escrow. The renter never becomes its ERC-721 owner.</span></div>
+        <div role="row"><strong role="cell">Payment</strong><span role="cell">The renter pays SQK upfront. The default split is 95% holder / 5% protocol, credited for later claim.</span></div>
+        <div role="row"><strong role="cell">Duration</strong><span role="cell">The holder sets a range of 1–365 whole days. Usage ends at the recorded expiry, without a transaction.</span></div>
+        <div role="row"><strong role="cell">Integration</strong><span role="cell">External apps must explicitly call <code>isUsable(tokenId, account)</code> to recognize a renter.</span></div>
+      </div>
+    </section>
+
+    <section className="docs-section" aria-labelledby="docs-flow-title">
+      <div className="docs-section-heading"><div><span className="docs-label">LIFECYCLE</span><h2 id="docs-flow-title">From listing to withdrawal</h2></div></div>
+      <ol className="docs-lifecycle">{lifecycle.map(([title,body],i)=><li key={title}><span>0{i+1}</span><h3>{title}</h3><p>{body}</p></li>)}</ol>
+    </section>
+
+    <aside className="docs-compatibility"><ShieldCheck size={22}/><div><span className="docs-label">READ BEFORE RENTING</span><h2>Usage does not grant mining or staking access</h2><p>Current Squeekchain contracts check NFT ownership and do not recognize this independent rental registry. A rental does not provide mining eligibility, reward sharing or ERC-4907 rights.</p><Link href="/docs/security/">Read security and compatibility limits <ArrowRight size={16}/></Link></div></aside>
+
+    <footer className="docs-reference-footer"><div><span className="docs-label">PRIMARY REFERENCES</span><p>Review official Squeekchain documentation alongside this protocol guide.</p></div><a href="https://docs.squeekchain.com/developers/" target="_blank" rel="noreferrer">Squeekchain developer docs <ArrowUpRight size={15}/></a><Link href="/app/">Open the app <ArrowUpRight size={15}/></Link></footer>
+  </div>;
+}

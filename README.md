@@ -4,7 +4,7 @@ Sepolia-only Squeek NFT rental escrow and temporary usage registry, with a Next.
 
 ## Deployment status
 
-Private frontend: [Open SubletSqk](https://hamsterdam-squeek-rentals.hoangnguyen181104hi.chatgpt.site). Frontend publication is complete; the rental contract remains undeployed until the local testnet key is filled.
+Private frontend preview: [Open SubletSqk](https://hamsterdam-squeek-rentals.hoangnguyen181104hi.chatgpt.site). The rental contract is deployed on Sepolia. Publish the current frontend build to show its confirmed address.
 
 <!-- DEPLOYMENT -->
 Rental: [0x43A8B02a3abc4d6C1d373FAE8385f618BC4f3bc3](https://eth-sepolia.blockscout.com/address/0x43A8B02a3abc4d6C1d373FAE8385f618BC4f3bc3)  
@@ -92,10 +92,6 @@ Configure a `sepolia` RPC alias or use a public RPC URL with that command. The F
 
 17 Foundry tests pass, including 256 fuzz runs. Frontend production build passes on Next.js 16.4.4 and wagmi 3.7.11. npm audit reports zero known vulnerabilities in both dependency trees after updates.
 
-Foundry covers list/delist, rent, 95/5 math, fee snapshot and cap, active-rental rejection, early withdrawal, exact expiry, withdrawal/relist nonce, claiming, unauthenticated operations, unexpected safe deposit, reentrancy during SQK payment/claim and NFT withdrawal, pause preserving exits, and price/duration/fee fuzzing (256 runs). `npm --prefix frontend run build` typechecks and statically builds all four routes. Live Sepolia compatibility probe has confirmed the official dependency contracts exist and ERC-4907 is unsupported. A local-only mock NFT/SQK exists exclusively in `test/` and is never used in the product UI or production deployment script.
+Foundry covers list/delist, rent, 95/5 math, fee snapshot and cap, active-rental rejection, early withdrawal, exact expiry, withdrawal/relist nonce, claiming, unauthenticated operations, unexpected safe deposit, reentrancy during SQK payment/claim and NFT withdrawal, pause preserving exits, and price/duration/fee fuzzing (256 runs). `npm --prefix frontend run build` typechecks and statically builds the public and app routes. Live Sepolia compatibility probe has confirmed the official dependency contracts exist and ERC-4907 is unsupported. A local-only mock NFT/SQK exists exclusively in `test/` and is never used in the product UI or production deployment script.
 
 This testnet prototype is not externally audited. Passing local tests does not establish compatibility with future Squeekchain upgrades. The official mining source is not explorer-verified per its docs, and governance can upgrade mining. Re-check deployed behavior before every integration change.
-
-## Design references and licenses
-
-Original mint/coral hamster-key vector brand: round ears, winking face and hamster teeth, with a key-shaped tail for the rental protocol. Source: `frontend/public/brand/subletsqk-mark.svg`; transparent PNG export and SVG/ICO/Apple favicons are included. Regenerate icons with `npm --prefix frontend run icons` (uses Next's bundled sharp). React Bits [Plasma](https://github.com/DavidHDev/react-bits/tree/main/src/ts-default/Backgrounds/Plasma) provides the full-viewport flame/wave background across the public landing, guide, docs and FAQ pages; its MIT + Commons Clause notice is retained at `frontend/components/ReactBits.LICENSE.md`. [Awesome DESIGN.md](https://github.com/VoltAgent/awesome-design-md) Linear analysis informed hierarchy/surfaces. [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) informed palette, interaction and accessibility. See `DESIGN.md` for project-specific choices.

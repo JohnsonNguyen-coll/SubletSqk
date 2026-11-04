@@ -5,3 +5,4 @@ out/
 *.tsbuildinfo
 *.log
 .openai/artifacts/
+AGENTS.md
