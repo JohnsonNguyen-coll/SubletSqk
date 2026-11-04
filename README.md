@@ -2,6 +2,12 @@
 
 Sepolia-only Squeek NFT rental escrow and temporary usage registry, with a Next.js + wagmi/viem frontend. This is an independent project, not an official Squeekchain integration.
 
+## Repository layout
+
+- `contract/` contains the Foundry project, Solidity source, tests, deployment scripts, dependencies, research and Sepolia deployment records.
+- `frontend/` contains the Next.js website and its public assets. Set the Vercel Root Directory to `frontend`.
+- `README.md` covers both parts of the project.
+
 ## Deployment status
 
 Private frontend preview: [Open SubletSqk](https://hamsterdam-squeek-rentals.hoangnguyen181104hi.chatgpt.site). The rental contract is deployed on Sepolia. Publish the current frontend build to show its confirmed address.
@@ -22,7 +28,7 @@ Smart contract deployed and verified on Sepolia. The frontend deployment record 
 | ERC-4907 | Not supported: live `supportsInterface(0xad092b5c)` returned false |
 | Eligibility | SqueekMining claim/merge require NFT ownership; approvals do not authorize either |
 
-Sources checked November 3, 2026: [deployment record](https://docs.squeekchain.com/assets/deployments/sepolia.json), [NFT reference](https://docs.squeekchain.com/developers/nft/), [mining reference](https://docs.squeekchain.com/developers/mining/). Pinned official ABIs and the deployment record are in `research/`. These technical references describe the deployed owner-based system; the whitepaper describes a different proposed staking economy. Do not mix the two. Public NFT minting is currently paused according to the docs.
+Sources checked November 3, 2026: [deployment record](https://docs.squeekchain.com/assets/deployments/sepolia.json), [NFT reference](https://docs.squeekchain.com/developers/nft/), [mining reference](https://docs.squeekchain.com/developers/mining/). Pinned official ABIs and the deployment record are in `contract/research/`. These technical references describe the deployed owner-based system; the whitepaper describes a different proposed staking economy. Do not mix the two. Public NFT minting is currently paused according to the docs.
 
 ## Architecture and compatibility
 
@@ -51,14 +57,14 @@ Ownable2Step administrator can pause new listings/rentals or change the fee for 
 Requirements: Node 22+, npm, Python 3 for a simple preview (optional). Native Foundry can be used instead of the bundled npm binary.
 
 ```powershell
-npm ci
+npm --prefix contract ci
 npm --prefix frontend ci
-npm test
+npm --prefix contract test
 npm --prefix frontend run build
 npm --prefix frontend run dev
 ```
 
-Open `http://127.0.0.1:3000`. Root `.npmrc` disables install scripts to work around the npm Foundry wrapper's Unix-only postinstall on Windows; its official platform binary is installed as an optional dependency. Run it with `node node_modules/@foundry-rs/forge/bin.mjs` if necessary. OpenZeppelin v5.6.1 and forge-std source dependencies are vendored under `lib/`. Solidity compiler is pinned to 0.8.30 with Cancun EVM.
+Open `http://127.0.0.1:3000`. `contract/.npmrc` disables install scripts to work around the npm Foundry wrapper's Unix-only postinstall on Windows; its official platform binary is installed as an optional dependency. OpenZeppelin v5.6.1 and forge-std source dependencies are vendored under `contract/lib/`. Solidity compiler is pinned to 0.8.30 with Cancun EVM.
 
 Public routes: `/` landing, `/how-it-works/`, `/docs/`, `/docs/renting/`, `/docs/listing/`, `/docs/security/`, `/docs/contracts/` and `/faq/`. Launch app enters `/app/` (browse). App routes are `/app/squeeks/` (wallet ownership lookup and escrow management), `/app/rentals/` (active rentals with countdown), and `/app/earnings/` (claims). Each destination appears in its respective top navigation. Legacy `/squeeks/`, `/rentals/` and `/earnings/` redirect to the new app URLs. Wallet providers load only inside the app layout. Wallet connection uses an injected EIP-1193 browser wallet. No WalletConnect API key is required. NFT lookup is by token ID, verified with live `ownerOf`; automatic wallet inventory indexing is not included. Lists use bounded `tokenPage` reads and current storage, not a mock API. Token IDs are retained for historical pagination, but withdrawn positions and expired rental history are not displayed as active rentals.
 
@@ -66,32 +72,33 @@ Set optional `NEXT_PUBLIC_SEPOLIA_RPC_URL` in `frontend/.env.local` for a browse
 
 ## Deploy to Sepolia
 
-1. Fill `PRIVATE_KEY` and `SEPOLIA_RPC_URL` in the already-created root `.env`. Use a testnet-only key. Optionally set `PROTOCOL_TREASURY`; default is the deployer.
+1. Fill `PRIVATE_KEY` and `SEPOLIA_RPC_URL` in `contract/.env`. Use a testnet-only key. Optionally set `PROTOCOL_TREASURY`; default is the deployer.
 2. Fund the deployer with Sepolia ETH. Do not send mainnet assets.
 3. Run:
 
 ```powershell
-npm test
-npm run build:contracts
-node script/deploy.mjs --check
-npm run deploy:sepolia
+npm --prefix contract test
+npm --prefix contract run build:contracts
+node contract/script/deploy.mjs --check
+npm --prefix contract run deploy:sepolia
 npm --prefix frontend run build
 ```
 
-The deploy script checks chain ID, deployed dependency code, SQK decimals, and ERC-4907 support; estimates gas; signs locally; waits for two confirmations; verifies rental NFT/SQK/admin/fee bindings; records the actual address, receipt and deployment block in `deployments/sepolia.json`, `frontend/lib/deployment.json` and this README. It records a transaction journal for safe receipt resumption and refuses duplicate deployment when an address is already recorded. Private key never enters frontend, metadata, output or source archives. After deploying, publish the rebuilt static `frontend/out/` directory.
+The deploy script checks chain ID, deployed dependency code, SQK decimals, and ERC-4907 support; estimates gas; signs locally; waits for two confirmations; verifies rental NFT/SQK/admin/fee bindings; records the actual address, receipt and deployment block in `contract/deployments/sepolia.json`, `frontend/lib/deployment.json` and this README. It records a transaction journal for safe receipt resumption and refuses duplicate deployment when an address is already recorded. Private key never enters frontend, metadata, output or source archives. After deploying, publish the rebuilt static `frontend/out/` directory. The current Sepolia address is already recorded; the script will not deploy another contract over it.
 
-Foundry alternative (requires Foundry on PATH, loads root `.env`):
+Foundry alternative (requires Foundry on PATH, run from `contract/` and load `contract/.env`):
 
 ```powershell
+cd contract
 forge script script/Deploy.s.sol:Deploy --rpc-url sepolia --broadcast
 ```
 
-Configure a `sepolia` RPC alias or use a public RPC URL with that command. The Foundry alternative does not update frontend/README automatically; copy the verified receipt address and block into deployment records before building. Prefer `npm run deploy:sepolia` for automatic recording.
+Configure a `sepolia` RPC alias or use a public RPC URL with that command. The Foundry alternative does not update frontend records automatically; copy the verified receipt address and block into deployment records before building. Prefer `npm --prefix contract run deploy:sepolia` for automatic recording on a fresh deployment.
 
 ## Validation
 
 17 Foundry tests pass, including 256 fuzz runs. Frontend production build passes on Next.js 16.4.4 and wagmi 3.7.11. npm audit reports zero known vulnerabilities in both dependency trees after updates.
 
-Foundry covers list/delist, rent, 95/5 math, fee snapshot and cap, active-rental rejection, early withdrawal, exact expiry, withdrawal/relist nonce, claiming, unauthenticated operations, unexpected safe deposit, reentrancy during SQK payment/claim and NFT withdrawal, pause preserving exits, and price/duration/fee fuzzing (256 runs). `npm --prefix frontend run build` typechecks and statically builds the public and app routes. Live Sepolia compatibility probe has confirmed the official dependency contracts exist and ERC-4907 is unsupported. A local-only mock NFT/SQK exists exclusively in `test/` and is never used in the product UI or production deployment script.
+Foundry covers list/delist, rent, 95/5 math, fee snapshot and cap, active-rental rejection, early withdrawal, exact expiry, withdrawal/relist nonce, claiming, unauthenticated operations, unexpected safe deposit, reentrancy during SQK payment/claim and NFT withdrawal, pause preserving exits, and price/duration/fee fuzzing (256 runs). `npm --prefix frontend run build` typechecks and statically builds the public and app routes. Live Sepolia compatibility probe has confirmed the official dependency contracts exist and ERC-4907 is unsupported. A local-only mock NFT/SQK exists exclusively in `contract/test/` and is never used in the product UI or production deployment script.
 
 This testnet prototype is not externally audited. Passing local tests does not establish compatibility with future Squeekchain upgrades. The official mining source is not explorer-verified per its docs, and governance can upgrade mining. Re-check deployed behavior before every integration change.

@@ -7,8 +7,7 @@ frontend/out/
 out/
 cache/
 broadcast/
-research/ui-ux-pro-max/
-lib/*/.git/
+contract/lib/*/.git/
 .openai/artifacts/
 *.log
 outputs/
