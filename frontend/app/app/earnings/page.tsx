@@ -1,2 +1,2 @@
-import PreviewMarketplace from '../../../components/PreviewMarketplace';
-export default function Page(){return <PreviewMarketplace view="earnings"/>}
+import Marketplace from '../../../components/Marketplace';
+export default function Page(){return <Marketplace view="earnings"/>}

@@ -56,7 +56,7 @@ Ownable2Step administrator can pause new listings/rentals or change the fee for 
 
 ## Run locally
 
-Requirements: Node 22+, npm, Python 3 for a simple preview (optional). Native Foundry can be used instead of the bundled npm binary.
+Requirements: Node 22+ and npm. Native Foundry can be used instead of the bundled npm binary.
 
 ```powershell
 npm --prefix contract ci
@@ -68,10 +68,18 @@ npm --prefix frontend run dev
 
 Open `http://127.0.0.1:3000`. `contract/.npmrc` disables install scripts to work around the npm Foundry wrapper's Unix-only postinstall on Windows; its official platform binary is installed as an optional dependency. OpenZeppelin v5.6.1 and forge-std source dependencies are vendored under `contract/lib/`. Solidity compiler is pinned to 0.8.30 with Cancun EVM.
 
-Public routes: `/` landing, `/how-it-works/`, `/docs/`, `/docs/renting/`, `/docs/listing/`, `/docs/security/`, `/docs/contracts/` and `/faq/`. Launch app opens the browser-only test flow at `/app/`. Its four tabs have separate URLs: `/app/`, `/app/squeeks/`, `/app/rentals/` and `/app/earnings/`. A one-time English notice explains that the current flow uses sample Squeeks and SQK, needs no wallet and sends no on-chain transactions. The user can switch between Holder and Guest, then list, rent, advance to expiry, withdraw and claim. State is stored in the browser and can be reset.
+Public routes: `/` landing, `/how-it-works/`, `/docs/`, `/docs/renting/`, `/docs/listing/`, `/docs/security/`, `/docs/contracts/` and `/faq/`. Launch app opens the live Sepolia marketplace at `/app/`. Its four tabs have separate URLs: `/app/`, `/app/squeeks/`, `/app/rentals/` and `/app/earnings/`. The app reads deployed contract state, discovers wallet NFTs from official Transfer logs, and requests wallet signatures for listing, renting, withdrawing and claiming. WalletConnect requires `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`; an injected browser wallet can connect without it.
+
+Every listing links to a shareable `/app/squeek/?id=<tokenId>` detail page with on-chain artwork, traits, rental terms and current ownership. Before listing, the app checks wallet ownership, Sepolia ETH and the official SqueekMining `claimable(0, [tokenId])` value; holders must acknowledge nonzero unclaimed rewards because escrow prevents their wallet from claiming until withdrawal. Before renting, the app displays SQK balance, allowance and Sepolia ETH. These reads can change before a transaction is mined; wallet confirmation and contract checks remain authoritative.
+
+Every listing links to a shareable `/app/squeek/?id=<tokenId>` detail page with on-chain artwork, traits, rental terms and current ownership. Before listing, the app checks wallet ownership, Sepolia ETH and the official SqueekMining `claimable(0, [tokenId])` value; holders must acknowledge nonzero unclaimed rewards because escrow prevents their wallet from claiming until withdrawal. Before renting, the app displays SQK balance, allowance and Sepolia ETH. These reads can change before a transaction is mined; wallet confirmation and contract checks remain authoritative.
+
+For Vercel, set the Root Directory to `frontend`. If you want WalletConnect and mobile wallet options, set `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` in Vercel Environment Variables and redeploy; see `frontend/.env.example`. `NEXT_PUBLIC_SEPOLIA_RPC_URL` can override the default public Sepolia RPC. These variables are public frontend configuration, never private keys.
 
 
-The Sepolia rental contract is deployed and documented below, but the current app does not invoke it. The earlier RainbowKit and direct on-chain marketplace implementation remains in source for future live activation; it is not mounted on the current app routes. Do not treat browser test balances, artwork or listings as official Squeekchain assets.
+The current app invokes the deployed Sepolia rental contract directly. There are no sample listings, browser balances or simulated actions. Real transactions require a compatible wallet, Sepolia ETH for gas and the official Sepolia NFT or SQK as applicable. VeilHub does not distribute those assets; the market can remain empty until a holder lists an eligible NFT.
+
+Read-only Sepolia verification on November 4, 2026 confirmed chain ID `11155111`, contract code at the recorded rental address, matching `nft()` and `sqk()` bindings, and `tokenCount() = 0`. No live list/rent/claim transaction has been executed in this verification.
 
 ## Deploy to Sepolia
 

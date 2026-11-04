@@ -28,7 +28,7 @@ export default function Docs(){
     <header className="docs-heading">
       <div className="docs-kicker"><BookOpen size={15}/> DOCUMENTATION <span>VERSION 0.1 · SEPOLIA</span></div>
       <h1>VeilHub documentation</h1>
-      <p>How NFT escrow, fixed-duration rentals and SQK payments work. The deployed protocol is on Sepolia; the current app provides a browser-only test flow with no on-chain transactions.</p>
+      <p>How NFT escrow, fixed-duration rentals and SQK payments work. The app reads the deployed Sepolia contract and asks your wallet to sign transactions.</p>
     </header>
     <DocsNav/>
 
@@ -43,7 +43,7 @@ export default function Docs(){
     </section>
 
     <section className="docs-section docs-primer" aria-labelledby="docs-model-title">
-      <div className="docs-section-heading"><div><span className="docs-label">PROTOCOL MODEL</span><h2 id="docs-model-title">The essential facts</h2></div><p>These rules are enforced by the deployed rental contract. The current app uses browser-only test records to walk through them.</p></div>
+      <div className="docs-section-heading"><div><span className="docs-label">PROTOCOL MODEL</span><h2 id="docs-model-title">The essential facts</h2></div><p>These rules are enforced by the deployed rental contract. The app reads its state directly from Sepolia.</p></div>
       <div className="docs-fact-table" role="table" aria-label="Protocol facts">
         <div role="row"><strong role="cell">Custody</strong><span role="cell">The listed NFT sits in contract escrow. The renter never becomes its ERC-721 owner.</span></div>
         <div role="row"><strong role="cell">Payment</strong><span role="cell">The renter pays SQK upfront. The default split is 95% holder / 5% protocol, credited for later claim.</span></div>

@@ -56,4 +56,10 @@
 .manual-lookup { margin-top: 18px; font-size: 12px; color: var(--muted); }
 .manual-lookup summary { cursor: pointer; }
 .manual-lookup .lookup-form { margin-top: 14px; }
-.preview-empty-link {display:inline-flex;align-items:center;gap:6px;margin:14px 0;color:var(--accent);font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.preflight-panel{margin:16px 0;padding:16px;border:1px solid var(--border);border-radius:12px;background:var(--surface-raised);font-size:12px;line-height:1.55}
+.preflight-panel>strong{display:block;font-size:13px;margin-bottom:8px}
+.preflight-panel p{margin:6px 0!important}
+.preflight-panel p[role='alert']{color:#ff9b8b}
+.preflight-panel a{color:var(--accent);text-decoration:underline}
+.preflight-ack{display:flex;align-items:flex-start;gap:8px;margin-top:12px;color:var(--ink)}
+.preflight-ack input{margin-top:3px}
