@@ -1,0 +1,61 @@
+/* A shared, compact navigation for the public site and the app. */
+.marketing-site .marketing-header nav.primary-nav,
+.app-header nav.primary-nav {
+  display:flex;
+  align-items:center;
+  flex:0 1 auto;
+  width:auto;
+  height:auto;
+  gap:3px;
+  padding:5px;
+  border:1px solid #756b7c65;
+  border-radius:12px;
+  background:#211f28e8;
+  box-shadow:0 1px 0 #ffffff0b inset;
+}
+
+.marketing-site .marketing-header nav.primary-nav a,
+.app-header nav.primary-nav a {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  height:37px;
+  padding:0 15px;
+  border:0;
+  border-radius:8px;
+  color:#c8c0cc;
+  font-size:12px;
+  font-weight:600;
+  line-height:1;
+  white-space:nowrap;
+  transition:background .18s ease,color .18s ease;
+}
+
+.marketing-site .marketing-header nav.primary-nav a:hover,
+.app-header nav.primary-nav a:hover {background:#393440;color:#fff9ef}
+
+.marketing-site .marketing-header nav.primary-nav a[aria-current],
+.app-header nav.primary-nav a[aria-current] {
+  background:#eadbc9;
+  color:#28232d;
+  box-shadow:0 1px 3px #0a080c36;
+}
+
+.marketing-site .marketing-header nav.primary-nav a[aria-current]::after {content:none}
+.app-header nav.primary-nav a[aria-current] {border-bottom:0}
+.marketing-site .marketing-header nav.primary-nav a:focus-visible,
+.app-header nav.primary-nav a:focus-visible {outline:2px solid #83f5cd;outline-offset:2px}
+
+@media(max-width:900px){
+  .app-header{height:auto;min-height:112px;flex-wrap:wrap;align-content:flex-start;padding-top:12px}
+  .app-header nav.primary-nav{order:3;width:100%;margin:8px 0 10px;overflow-x:auto;scrollbar-width:none;justify-content:flex-start}
+  .app-header nav.primary-nav::-webkit-scrollbar{display:none}
+}
+
+@media(max-width:760px){
+  .marketing-site .marketing-header nav.primary-nav{order:3;width:100%;height:auto;margin:8px 0 11px;padding:4px;gap:1px;justify-content:space-between}
+  .marketing-site .marketing-header nav.primary-nav a{flex:1;height:35px;padding:0 7px;font-size:10.5px}
+  .app-header nav.primary-nav{height:auto;margin:8px 0 11px;padding:4px;gap:2px}
+  .app-header nav.primary-nav a{height:35px;padding:0 11px;font-size:11px}
+}

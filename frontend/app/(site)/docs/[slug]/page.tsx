@@ -1,4 +1,3 @@
-import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import Link from 'next/link';
 import {ArrowLeft, ArrowRight, ArrowUpRight, ShieldCheck} from 'lucide-react';
@@ -8,10 +7,6 @@ import deployment from '../../../../lib/deployment.json';
 
 export function generateStaticParams(){return Object.keys(guides).map(slug=>({slug}))}
 export const dynamicParams=false;
-export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{
-  const {slug}=await params;
-  return {title:(guides[slug as GuideSlug]?.title||'Documentation')+' | SubletSqk'};
-}
 
 const addresses=[
   ['Rental contract',deployment.address],

@@ -5,7 +5,7 @@ import DocsNav from '../../../components/DocsNav';
 import deployment from '../../../lib/deployment.json';
 
 export const metadata:Metadata={
-  title:'Documentation | SubletSqk',
+  title:'SubletSqk',
   description:'Protocol documentation for SubletSqk NFT rentals on Ethereum Sepolia.',
 };
 
