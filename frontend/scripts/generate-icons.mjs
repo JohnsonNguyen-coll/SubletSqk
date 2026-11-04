@@ -5,7 +5,7 @@ import sharp from 'sharp';
 const root=new URL('../',import.meta.url);
 const mark=await readFile(new URL('public/brand/veilhub-mark.svg',root),'utf8');
 const body=mark.replace(/<svg[^>]*>/,'').replace('</svg>','').replace(/<title>.*?<\/title>/,'').replace(/\n[ \t]*\n/g,'\n');
-const icon=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 112 112"><rect width="112" height="112" rx="26" fill="#13151D"/><g transform="translate(8 8)">${body}</g></svg>`;
+const icon=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 112 112" fill="none"><g transform="translate(8 8)">${body}</g></svg>`;
 await writeFile(new URL('app/icon.svg',root),icon+'\n');
 await sharp(Buffer.from(mark)).resize(512,512).png().toFile(fileURLToPath(new URL('public/brand/veilhub-mark.png',root)));
 await sharp(Buffer.from(icon)).resize(180,180).png().toFile(fileURLToPath(new URL('app/apple-icon.png',root)));
