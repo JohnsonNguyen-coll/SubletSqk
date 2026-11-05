@@ -9,7 +9,7 @@ contract Deploy is Script {
         address deployer = vm.addr(key);
         address treasury = vm.envOr("PROTOCOL_TREASURY", deployer);
         vm.startBroadcast(key);
-        deployed = new SubletSqk(0x0eAF3E0d40A0a8E5a6Ac030b2459E9FB0B7905c6, 0x6872BfA5CcC3E9e440C6c16e5fFdAbb8DBA4Cc76, treasury, deployer);
+        deployed = new SubletSqk(0xC4C7982657f00509548F3a3a41db7FA439a6856B, 0xd78a3956cF63164d1Fa1C622ad3c66623162Fa1e, treasury, deployer);
         vm.stopBroadcast();
     }
 }

@@ -13,7 +13,7 @@ const topics=[
   {number:'01',slug:'renting',title:'Renting',description:'Payment, duration, expiry and the exact scope of usage rights.',Icon:KeyRound},
   {number:'02',slug:'listing',title:'Listing',description:'Depositing an NFT, setting terms, delisting and withdrawing.',Icon:House},
   {number:'03',slug:'trading',title:'NFT trading',description:'Escrow sales, SQK settlement, royalties and reward ownership.',Icon:ShoppingBag},
-  {number:'04',slug:'staking',title:'Staking scenarios',description:'Explore the whitepaper power model with editable assumptions.',Icon:ChartNoAxesCombined},
+  {number:'04',slug:'staking',title:'Staking power and scenarios',description:'Explore the deployed Sepolia power model with editable assumptions.',Icon:ChartNoAxesCombined},
   {number:'05',slug:'security',title:'Security & limits',description:'Escrow guarantees, administrative powers and known limitations.',Icon:ShieldCheck},
   {number:'06',slug:'contracts',title:'Contracts & API',description:'Deployment addresses, public reads and lifecycle functions.',Icon:FileCode2},
 ] as const;
@@ -36,7 +36,7 @@ export default function Docs(){
     <section className="docs-deployment" aria-labelledby="docs-deployment-title">
       <div className="docs-deployment-head"><div><span className="docs-status"><span className="live-dot"/> LIVE ON TESTNET</span><h2 id="docs-deployment-title">Deployment status</h2></div><span>Ethereum Sepolia · Chain ID 11155111</span></div>
       <div className="docs-deployment-grid"><div><span>RENTAL CONTRACT</span>{deployment.address?<a href={'https://eth-sepolia.blockscout.com/address/'+deployment.address} target="_blank" rel="noreferrer"><code>{deployment.address}</code><ArrowUpRight size={15}/></a>:<em>Pending deployment</em>}</div><div><span>TRADE CONTRACT</span>{tradeDeployment.address?<a href={'https://eth-sepolia.blockscout.com/address/'+tradeDeployment.address} target="_blank" rel="noreferrer"><code>{tradeDeployment.address}</code><ArrowUpRight size={15}/></a>:<em>Pending deployment</em>}</div></div>
-      <p>Staking Lab is an estimated calculator; no official Sepolia staking contract is deployed.</p>
+      <p>Official Sepolia Staking is deployed. VeilHub reads its power settings and your position; reward scenarios remain estimates.</p>
     </section>
 
     <section className="docs-section" aria-labelledby="docs-start-title">
@@ -59,7 +59,7 @@ export default function Docs(){
       <ol className="docs-lifecycle">{lifecycle.map(([title,body],i)=><li key={title}><span>0{i+1}</span><h3>{title}</h3><p>{body}</p></li>)}</ol>
     </section>
 
-    <aside className="docs-compatibility"><ShieldCheck size={22}/><div><span className="docs-label">READ BEFORE RENTING</span><h2>Usage does not grant mining or staking access</h2><p>Current Squeekchain contracts check NFT ownership and do not recognize this independent rental registry. A rental does not provide mining eligibility, reward sharing or ERC-4907 rights.</p><Link href="/docs/security/">Read security and compatibility limits <ArrowRight size={16}/></Link></div></aside>
+    <aside className="docs-compatibility"><ShieldCheck size={22}/><div><span className="docs-label">READ BEFORE RENTING</span><h2>Usage does not grant staking access</h2><p>Official Squeekchain Staking requires an NFT deposit and does not recognize VeilHub rental rights. A rental does not provide staking eligibility, reward sharing or ERC-4907 rights.</p><Link href="/docs/security/">Read security and compatibility limits <ArrowRight size={16}/></Link></div></aside>
 
     <footer className="docs-reference-footer"><div><span className="docs-label">PRIMARY REFERENCES</span><p>Review official Squeekchain documentation alongside this protocol guide.</p></div><a href="https://docs.squeekchain.com/developers/" target="_blank" rel="noreferrer">Squeekchain developer docs <ArrowUpRight size={15}/></a><Link href="/app/">Open the app <ArrowUpRight size={15}/></Link></footer>
   </div>;

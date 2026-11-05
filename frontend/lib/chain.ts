@@ -2,15 +2,18 @@ import { createPublicClient, http, parseAbi, parseAbiItem, type Address } from '
 import { sepolia } from 'viem/chains';
 import deployment from './deployment.json';
 import tradeDeployment from './trade-deployment.json';
-export const NFT = '0x0eAF3E0d40A0a8E5a6Ac030b2459E9FB0B7905c6' as Address;
-export const SQK = '0x6872bfa5ccc3e9e440c6c16e5ffdabb8dba4cc76' as Address;
-export const MINING = '0x3beE588fC20dE788Bac17d33b41Da7346cb27EC4' as Address;
+// Official Sepolia release core-sepolia-20261103, revision 7.
+export const NFT = '0xc4c7982657f00509548f3a3a41db7fa439a6856b' as Address;
+export const SQK = '0xd78a3956cf63164d1fa1c622ad3c66623162fa1e' as Address;
+export const MINING = '0x2dccb11fcc2defdd188555e45acb52231e82e218' as Address;
+export const STAKING = '0x50fd1780526c3186a0c037c7622203bc4fb611ca' as Address;
 export const MARKET = deployment.address as Address | null;
 export const TRADE = tradeDeployment.address as Address | null;
 export const client = createPublicClient({ chain: sepolia, transport: http(process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com') });
 export const nftAbi = parseAbi(['function balanceOf(address) view returns (uint256)', 'function ownerOf(uint256) view returns (address)', 'function tokenURI(uint256) view returns (string)', 'function getApproved(uint256) view returns (address)', 'function approve(address,uint256)']);
 const transferEvent = parseAbiItem('event Transfer(address indexed from,address indexed to,uint256 indexed tokenId)');
-const nftDeploymentBlock = 11902282n;
+const nftDeploymentBlock = 12057769n;
+export const stakingDeploymentBlock = 12058156n;
 
 /** Discover candidates from the official NFT's transfer logs; verify every candidate against live ownerOf. */
 export async function ownedSqueeks(account: Address): Promise<bigint[]> {
@@ -43,7 +46,19 @@ export const tradeAbi = parseAbi([
   'function buy(uint256,uint256,uint256)', 'function claim()'
 ]);
 export const royaltyAbi = parseAbi(['function royaltyInfo(uint256,uint256) view returns (address,uint256)']);
-export const miningAbi = parseAbi(['function claimable(uint8 collection,uint256[] tokenIds) view returns (uint256 amount)']);
+export const stakingAbi = parseAbi([
+  'function accountPower(address) view returns (uint256 nftPower,uint256 sqkPower)',
+  'function basePower(address,uint8) view returns (uint64)',
+  'function claimable(address) view returns (uint256)',
+  'function depositor(address,uint256) view returns (address)',
+  'function powerParameters() view returns (uint256 sqkPerPower,uint256 referencePower)',
+  'function stakeOf(address) view returns (uint256 principal,uint256 freshPrincipal,uint64 freshUntilRound)',
+  'function totalStaked() view returns (uint256)',
+  'function totalFresh() view returns (uint256,uint64)',
+  'function launchReady() view returns (bool)',
+  'function rewardState() view returns ((uint256 funded,uint256 paid,uint256 compounded,uint256 rewardIndex,uint256 remaining,uint128 totalNftPower,uint128 totalSqkPower,uint256 streamRate,uint64 lastAccruedAt,uint64 streamEndsAt))'
+]);
+export const depositedEvent = parseAbiItem('event Deposited(address indexed account,address indexed collection,uint256 indexed tokenId,uint8 level,uint64 basePower,uint256 power)');
 export const marketAbi = parseAbi([
   'function listings(uint256) view returns (address owner,uint128 pricePerDay,uint16 minDays,uint16 maxDays,uint16 feeBps,bool listed,address renter,uint64 expiresAt,uint256 nonce)',
   'function tokenCount() view returns (uint256)', 'function tokenPage(uint256,uint256) view returns (uint256[])',

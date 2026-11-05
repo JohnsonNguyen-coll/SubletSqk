@@ -1,8 +1,11 @@
 {
   "chainId": 11155111,
-  "address": "0x43A8B02a3abc4d6C1d373FAE8385f618BC4f3bc3",
-  "transactionHash": "0x3101f963ea123d281b0ce7774bd8fa1f2d37e6f1801c29d12c7708030b4c4c9b",
-  "blockNumber": 12057052,
-  "deployer": "0xadD67137b37E5A61B0566410a8551374dD6a620d",
+  "release": "core-sepolia-20261103",
+  "address": "0x21b0f406C5cbB106f030dD64f5A8d3881f87021F",
+  "transactionHash": "0x326a4fa0488d7b90b04acd21d6cf608a2d02fdca8d3f2f1b84e6d4f237a75eba",
+  "blockNumber": 12070627,
+  "nft": "0xC4C7982657f00509548F3a3a41db7FA439a6856B",
+  "sqk": "0xd78a3956cF63164d1Fa1C622ad3c66623162Fa1e",
+  "admin": "0xadD67137b37E5A61B0566410a8551374dD6a620d",
   "treasury": "0xadD67137b37E5A61B0566410a8551374dD6a620d"
 }

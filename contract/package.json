@@ -4,7 +4,7 @@
   "scripts": {
     "test": "node node_modules/@foundry-rs/forge/bin.mjs test",
     "build:contracts": "node node_modules/@foundry-rs/forge/bin.mjs build",
-    "deploy:sepolia": "node script/deploy.mjs"
+    "deploy:sepolia": "node script/deploy-current.mjs"
   },
   "devDependencies": {
     "@foundry-rs/forge": "1.7.1"
