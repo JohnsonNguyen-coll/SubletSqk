@@ -43,9 +43,9 @@ Default revenue split is 95% depositor / 5% protocol. The fee is captured when l
 
 `/app/portfolio/` discovers wallet-held NFTs from official transfer events and verifies `ownerOf`; it also reads registered official staking deposits and VeilHub rental/trade positions on-chain. It displays wallet SQK, staked SQK, power and claimable staking SQK. The [official Sepolia test claim](https://sepolia.squeekchain.com/mint) may supply a test Squeek to eligible wallets; eligibility is determined by Squeekchain after connecting. VeilHub does not mint or faucet NFTs or SQK. Sepolia ETH is still needed for gas.
 
-## Wheel Circuit arcade
+## Pixel World and Wheel Circuit
 
-`/app/arcade/` is a browser-only mini game. Move a Squeek with arrow keys, WASD or touch controls, collect wheel pulses, dodge static and visit the staking dock to toggle a virtual power badge. Its score and personal best are local game values, not SQK or on-chain staking rewards. It does not connect a wallet or submit transactions. The page links to the official staking guide for the real protocol.
+`/app/arcade/` is a browser-only pixel world. Move a Squeek with arrow keys, WASD or touch controls, visit the Wheelhouse, Staking Grove, Rental Burrow and Trade Market, and interact with glowing markers using E. The map links to the actual VeilHub rental and trade pages and the separate staking calculator. Discoveries are saved in this browser. The Wheelhouse opens Wheel Circuit at `/app/arcade/wheel/`, where work pulses and a virtual power badge affect arcade points only. The world and game do not award SQK, stake assets or submit wallet transactions.
 
 ## Local development
 

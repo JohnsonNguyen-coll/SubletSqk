@@ -1,2 +1,2 @@
-import WheelArcade from '../../../components/WheelArcade';
-export default function Page(){return <WheelArcade/>}
+import PixelWorld from '../../../components/PixelWorld';
+export default function Page(){return <PixelWorld/>}
