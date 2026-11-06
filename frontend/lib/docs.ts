@@ -63,5 +63,6 @@ export const faqs=[
  ['Can I use real ETH or mainnet SQK?','No mainnet assets. The app connects a wallet and sends real transactions on Ethereum Sepolia only. Use Sepolia ETH for gas and the official Sepolia SQK token for rentals.'],
  ['How can I test the app?','Launch the app, connect a Sepolia wallet and browse real contract listings. Listing requires an official Sepolia Squeek NFT; renting requires official Sepolia SQK and ETH for gas. Eligible users can claim a test Squeek at sepolia.squeekchain.com/mint. VeilHub has no SQK faucet.'],
  ['Can I trade my Squeek here?','Yes, the separate Sepolia trade contract supports fixed-price sales in official SQK. Listing escrows the NFT. A buyer pays SQK, the NFT transfers, and the seller and ERC-2981 royalty receiver claim their shares. Previously earned staking rewards stay with the account that earned them.'],
+ ['Does Wheel Circuit earn SQK?','No. Wheel Circuit is a browser-only arcade game. Its points and virtual staking badge are local game mechanics; no SQK or on-chain staking transaction is involved.'],
  ['Can I stake SQK through VeilHub?','Official Sepolia Staking is deployed. VeilHub reads its power settings and your position, but the lab only estimates future reward scenarios. Use the official Squeekchain account to stake, unstake or claim.']
 ] as const;

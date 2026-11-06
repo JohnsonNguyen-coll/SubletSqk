@@ -43,6 +43,10 @@ Default revenue split is 95% depositor / 5% protocol. The fee is captured when l
 
 `/app/portfolio/` discovers wallet-held NFTs from official transfer events and verifies `ownerOf`; it also reads registered official staking deposits and VeilHub rental/trade positions on-chain. It displays wallet SQK, staked SQK, power and claimable staking SQK. The [official Sepolia test claim](https://sepolia.squeekchain.com/mint) may supply a test Squeek to eligible wallets; eligibility is determined by Squeekchain after connecting. VeilHub does not mint or faucet NFTs or SQK. Sepolia ETH is still needed for gas.
 
+## Wheel Circuit arcade
+
+`/app/arcade/` is a browser-only mini game. Move a Squeek with arrow keys, WASD or touch controls, collect wheel pulses, dodge static and visit the staking dock to toggle a virtual power badge. Its score and personal best are local game values, not SQK or on-chain staking rewards. It does not connect a wallet or submit transactions. The page links to the official staking guide for the real protocol.
+
 ## Local development
 
 Requirements: Node 22+, npm. Contract code uses Solidity 0.8.30, OpenZeppelin v5 and Foundry.
