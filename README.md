@@ -1,6 +1,6 @@
 # VeilHub
 
-VeilHub is an independent Ethereum Sepolia marketplace for official Squeek NFTs. It has an NFT rental registry, fixed-price SQK trading, a read-only portfolio and a staking scenario calculator. The frontend is Next.js with wagmi, viem and RainbowKit. VeilHub is not an official Squeekchain product and has no mainnet deployment.
+VeilHub is an independent Ethereum Sepolia marketplace for official Squeek NFTs. It has an NFT rental registry, fixed-price SQK trading, a read-only portfolio, a staking scenario calculator and a mining scenario lab. The frontend is Next.js with wagmi, viem and RainbowKit. VeilHub is not an official Squeekchain product and has no mainnet deployment.
 
 ## Project structure
 
@@ -41,11 +41,13 @@ Default revenue split is 95% depositor / 5% protocol. The fee is captured when l
 
 `/app/staking/` reads live power parameters, level weights, total staked SQK and connected-wallet staking balances from the [official Sepolia Staking contract](https://docs.squeekchain.com/rewards/staking/). The calculator applies the deployed power formula to editable holdings. **Reward amounts remain estimates** because future issuance, completed blocks and other participants' power are editable assumptions. VeilHub does not send official staking transactions; use the [Squeekchain account](https://sepolia.squeekchain.com/account) to deposit, withdraw or claim.
 
+`/app/mining/` models Squeekchain mining with the official integer rule. It reads SqueekCore `state()` and SqueekMining `state()` / `issuanceSchedule()` at one Sepolia block when the RPC is available; otherwise it uses the published release `core-sepolia-20261103`, revision 7 values. Visitors adjust accepted work per ten-minute round and the number of rounds. The simulator prices each round at its previous difficulty, then steers difficulty when work is at least 40; it carries unfinished block units forward and applies the deployed bonus and three-period halving schedule to estimate future SQK sent to Staking. Inputs describe hypothetical work: VeilHub cannot create physical work, issue SQK, pay the visitor or predict the hamster's future activity. If official Mining is not active, the SQK output assumes a hypothetical reward start. See the [SqueekCore rule](https://docs.squeekchain.com/developers/core/) and [SqueekMining schedule](https://docs.squeekchain.com/developers/mining/).
+
 `/app/portfolio/` discovers wallet-held NFTs from official transfer events and verifies `ownerOf`; it also reads registered official staking deposits and VeilHub rental/trade positions on-chain. It displays wallet SQK, staked SQK, power and claimable staking SQK. The [official Sepolia test claim](https://sepolia.squeekchain.com/mint) may supply a test Squeek to eligible wallets; eligibility is determined by Squeekchain after connecting. VeilHub does not mint or faucet NFTs or SQK. Sepolia ETH is still needed for gas.
 
 ## Pixel World and Wheel Circuit
 
-`/app/arcade/` is a browser-only pixel world. Move a Squeek with arrow keys, WASD or touch controls, visit the Wheelhouse, Staking Grove, Rental Burrow and Trade Market, and interact with glowing markers using E. The map links to the actual VeilHub rental and trade pages and the separate staking calculator. Discoveries are saved in this browser. The Wheelhouse opens Wheel Circuit at `/app/arcade/wheel/`, where work pulses and a virtual power badge affect arcade points only. The world and game do not award SQK, stake assets or submit wallet transactions.
+`/app/arcade/` is a browser-only pixel world. Move a Squeek with arrow keys, WASD or touch controls, visit the Wheelhouse, Staking Grove, Rental Burrow and Trade Market, and interact with glowing markers using E. The map links to the actual VeilHub rental and trade pages and the separate staking calculator. Discoveries are saved in this browser. Each of the four districts adds an Arcade Passport stamp and 50 local explorer points; finding all four adds a 200 point bonus. Discovered districts unlock fast travel from the map sidebar. These points have no SQK value. The Wheelhouse opens Wheel Circuit at `/app/arcade/wheel/`, where work pulses and a virtual power badge affect arcade points only. The world and game do not award SQK, stake assets or submit wallet transactions.
 
 ## Local development
 
